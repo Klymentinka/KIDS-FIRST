@@ -1,4 +1,4 @@
-import React, { useEffect, useState,lazy } from 'react';
+import React, { useEffect, useState, lazy } from 'react';
 
 import {
   CAvatar,
@@ -68,18 +68,11 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (!userInfo) {
-      console.log('uu',userInfo)
+      console.log('uu', userInfo)
 
       props.history.push('/login');
     }
   }, [props.history, userInfo]);
-
-
-
-
-
-
-
 
 
   return (
