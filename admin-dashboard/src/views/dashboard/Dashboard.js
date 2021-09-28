@@ -66,13 +66,13 @@ const Dashboard = (props) => {
   const { userInfo } = userSignin;
 
 
-  useEffect(() => {
-    if (!userInfo) {
-      console.log('uu', userInfo)
+  // useEffect(() => {
+  //   if (!userInfo) {
+  //     console.log('uu', userInfo)
 
-      props.history.push('/login');
-    }
-  }, [props.history, userInfo]);
+  //     props.history.push('/login');
+  //   }
+  // }, [props.history, userInfo]);
 
 
   return (
