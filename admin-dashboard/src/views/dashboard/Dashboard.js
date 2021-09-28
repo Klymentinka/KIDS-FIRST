@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { useEffect, useState,lazy } from 'react';
 
 import {
   CAvatar,
@@ -50,14 +50,37 @@ import avatar3 from './../../assets/images/avatars/3.jpg'
 import avatar4 from './../../assets/images/avatars/4.jpg'
 import avatar5 from './../../assets/images/avatars/5.jpg'
 import avatar6 from './../../assets/images/avatars/6.jpg'
+import { useDispatch, useSelector } from 'react-redux';
 
 const WidgetsDropdown = lazy(() => import('../components/widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../components/widgets/WidgetsBrand.js'))
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
+
+
+
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
+
+
+  useEffect(() => {
+    if (!userInfo) {
+      console.log('uu',userInfo)
+
+      props.history.push('/login');
+    }
+  }, [props.history, userInfo]);
+
+
+
+
+
+
+
+
 
   return (
     <>
