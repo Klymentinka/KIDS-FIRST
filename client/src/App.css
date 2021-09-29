@@ -1,0 +1,16 @@
+.App {
+  text-align: center;
+}
+
+h1, h2 {
+  padding: 10px;
+}
+
+#div {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10px;
+  height: 600px;
+  color: brown;
+}
+
