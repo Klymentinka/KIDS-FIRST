@@ -14,7 +14,7 @@ import {
   CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked} from '@coreui/icons'
+import { cilLockLocked } from '@coreui/icons'
 import { signin } from '../../../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../../../components/LoadingBox';
@@ -30,13 +30,12 @@ const Login = (props) => {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo, loading, error } = userSignin;
 
-  console.log(userSignin.failedLoginAttempts)
   const redirect = props.location.search
     ? props.location.search.split('=')[1]
     : '/';
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userSignin.userInfo.is_admin) {
       props.history.push(redirect);
     }
   }, [props.history, redirect, userInfo]);
@@ -45,12 +44,12 @@ const Login = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-   
+
     dispatch(signin(email, password));
     //props.history.push('/dashboard');
     //  setPassword("");
     //  setEmail("");
-    
+
   };
 
 
@@ -68,21 +67,21 @@ const Login = (props) => {
                     {error && <MessageBox variant="danger">{error}</MessageBox>}
                     <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
-                      
+
                       <CInputGroupText>@</CInputGroupText>
-                      <CFormInput  type="email" placeholder="Email" value ={email}  autoComplete="email" onChange={(e) => setEmail(e.target.value)}/>
+                      <CFormInput type="email" placeholder="Email" value={email} autoComplete="email" onChange={(e) => setEmail(e.target.value)} />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
-                      type="password" placeholder="Password" value ={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)} 
+                        type="password" placeholder="Password" value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4"  type="submit">
+                        <CButton color="primary" className="px-4" type="submit">
                           Login
                         </CButton>
                       </CCol>
