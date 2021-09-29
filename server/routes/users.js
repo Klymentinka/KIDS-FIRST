@@ -12,18 +12,6 @@ const is_parent = require("../middleware/parentAuthorize")
 
 
 
-
-/* GET users listing. */
-// router.get(
-//   '/seed',
-//   expressAsyncHandler(async (req, res) => {
-//     //await User.remove({});
-//     const createdUsers = await Parent.insertMany(data.users);
-//     res.send({ createdUsers });
-//   })
-// );
-
-
 router.post(
   '/parent/register',
   expressAsyncHandler(async (req, res) => {
@@ -59,7 +47,7 @@ router.post(
 );
 
 router.post(
-  '/coParent/register',authorize,is_parent,
+  '/coParent/register', authorize, is_parent,
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -94,7 +82,7 @@ router.post(
 );
 
 router.post(
-  '/child/register',authorize,is_parent,
+  '/child/register', authorize, is_parent,
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -202,29 +190,104 @@ router.post(
 
   }));
 
+// router.post(
+//   '/parent/signin',
+//   expressAsyncHandler(async (req, res) => {
+//     const { email, password } = req.body;
+//     if (email === '' && password === '') {
+//       res.status(401).send({ message: 'Please enter Email and Password' });
+//     } else {
+//       const parent = await Parent.findOne({ email });
+//       if (!parent) {
+//         res.status(401).send({ message: 'Parent with this Email does not exist.' });
+//       } else {
+//         if (parent) {
+//           if (password === '') {
+//             res.status(401).send({ message: 'Please Enter Password.' });
+//           } else {
+//             if (await bcrypt.compare(
+//               req.body.password,
+//               parent.password)) {
+//               res.send({
+//                 _id: parent._id,
+//                 email: parent.email,
+//                 is_parent: parent.is_parent,
+//                 token: generateToken(parent),
+//               });
+//             } else {
+//               res.status(401).send({ message: 'Password is Incorrect.' });
+//             }
+//           }
+//         } else {
+//           res.status(401).send({ message: 'Invalid Email or Password' });
+//         }
+//       }
+//     }
+
+//   }));
+
+// router.post(
+//   '/coParent/signin',
+//   expressAsyncHandler(async (req, res) => {
+//     const { email, password } = req.body;
+//     if (email === '' && password === '') {
+//       res.status(401).send({ message: 'Please enter Email and Password' });
+//     } else {
+//       const coParent = await CoParent.findOne({ email });
+//       if (!coParent) {
+//         res.status(401).send({ message: 'Co-Parent with this Email does not exist.' });
+//       } else {
+//         if (coParent) {
+//           if (password === '') {
+//             res.status(401).send({ message: 'Please Enter Password.' });
+//           } else {
+//             if (await bcrypt.compare(
+//               req.body.password,
+//               coParent.password)) {
+//               res.json({
+//                 _id: coParent._id,
+//                 createBy:coParent.createBy,
+//                 email: coParent.email,
+//                 is_co_parent: coParent.is_co_parent,
+//                 token: generateToken(coParent),
+//               });
+//             } else {
+//               res.status(401).send({ message: 'Password is Incorrect.' });
+//             }
+//           }
+//         } else {
+//           res.status(401).send({ message: 'Invalid Email or Password' });
+//         }
+//       }
+//     }
+//   }));
+
+
+
 router.post(
-  '/parent/signin',
+  '/signin',
   expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (email === '' && password === '') {
       res.status(401).send({ message: 'Please enter Email and Password' });
     } else {
-      const parent = await Parent.findOne({ email });
-      if (!parent) {
-        res.status(401).send({ message: 'Parent with this Email does not exist.' });
+      const user = await Parent.findOne({ email }) || await CoParent.findOne({ email });
+      if (!user) {
+        res.status(401).send({ message: 'User with this Email does not exist.' });
       } else {
-        if (parent) {
+        if (user) {
           if (password === '') {
             res.status(401).send({ message: 'Please Enter Password.' });
           } else {
             if (await bcrypt.compare(
               req.body.password,
-              parent.password)) {
+              user.password)) {
               res.send({
-                _id: parent._id,
-                email: parent.email,
-                is_parent: parent.is_parent,
-                token: generateToken(parent),
+                _id: user._id,
+                email: user.email,
+                is_parent: user.is_parent,
+                is_co_parent: user.is_co_parent,
+                token: generateToken(user),
               });
             } else {
               res.status(401).send({ message: 'Password is Incorrect.' });
@@ -238,41 +301,26 @@ router.post(
 
   }));
 
-router.post(
-  '/coParent/signin',
-  expressAsyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-    if (email === '' && password === '') {
-      res.status(401).send({ message: 'Please enter Email and Password' });
-    } else {
-      const coParent = await CoParent.findOne({ email });
-      if (!coParent) {
-        res.status(401).send({ message: 'Co-Parent with this Email does not exist.' });
-      } else {
-        if (coParent) {
-          if (password === '') {
-            res.status(401).send({ message: 'Please Enter Password.' });
-          } else {
-            if (await bcrypt.compare(
-              req.body.password,
-              coParent.password)) {
-              res.json({
-                _id: coParent._id,
-                createBy:coParent.createBy,
-                email: coParent.email,
-                is_co_parent: coParent.is_co_parent,
-                token: generateToken(coParent),
-              });
-            } else {
-              res.status(401).send({ message: 'Password is Incorrect.' });
-            }
-          }
-        } else {
-          res.status(401).send({ message: 'Invalid Email or Password' });
-        }
-      }
-    }
-  }));
+
+router.put('/:id', async (req, res) => {
+  const user = await Parent.findById(req.params.id) || await CoParent.findById(req.params.id);
+  if (user) {
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
+    user.email = req.body.email || user.email;
+    user.password = req.body.password || user.password;
+    user.is_co_parent = req.body.is_co_parent || user.is_co_parent;
+    user.is_parent = req.body.is_parent || user.is_parent;
+
+    const updateduser = await user.save();
+    res.send({ message: 'user Updated', user: updateduser });
+  } else {
+    res.status(404).send({ message: 'user Not Found' });
+  }
+}
+);
+
 
 module.exports = router;
 

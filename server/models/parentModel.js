@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const parentSchema = new mongoose.Schema(
   {
-    first_name: { type: String,  trim: true, unique: true, lowercase: true },
-    last_name: { type: String, trim: true, unique: true, lowercase: true },
-    Date_of_birth: { type: Date },
+    firstName: { type: String, trim: true, unique: true, lowercase: true },
+    lastName: { type: String, trim: true, unique: true, lowercase: true },
+    dateOfBirth: { type: Date },
     email: { type: String, required: true, unique: true, trim: true, lowercase: true },
     password: { type: String, required: true },
     is_parent: { type: Boolean, default: false, required: true },
