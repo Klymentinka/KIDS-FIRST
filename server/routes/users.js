@@ -7,6 +7,7 @@ const Child = require("../models/childModel.js");
 const Admin = require("../models/adminModel.js");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken.js");
+const sendEmail = require("../utils/email.js");
 const authorize = require("../middleware/authorize");
 const is_parent = require("../middleware/parentAuthorize");
 
@@ -245,6 +246,44 @@ router.put("/:id", async (req, res) => {
 router.post(
   "/forget-password",
   expressAsyncHandler(async (req, res) => {
+    Parent.findOne({ email: req.body.email }, async function (err, parent) {
+      if (!parent) {
+        res
+          .status(404)
+          .send("error, No account with that email address exists.");
+        // return //res.redirect("/forgot");
+      } else {
+        const resetToken = parent.createPasswordResetToken();
+        await parent.save({ validateBeforeSave: false });
+        console.log("have a look at the token", resetToken);
+        const link = `${process.env.BASE_URL}/password-reset/${parent._id}/${resetToken}`;
+        console.log("before try catch", link);
+        try {
+          sendEmail({
+            email: parent.email,
+            subject: "Password reset",
+            message: `click on ${link} to reset your password`,
+          });
+
+          console.log("after try catch send maul");
+          res
+            .status(200)
+            .send("password reset link sent to your email account");
+        } catch (err) {
+          console.log("after try catch show mail");
+
+          (parent.passwordResetToken = undefined),
+            (parent.passwordResetExpires = undefined);
+          parent.save({ validateBeforeSave: false });
+        }
+      }
+    });
+  })
+);
+
+/*router.patch(
+  "/reset-password/:token",
+  expressAsyncHandler(async (req, res) => {
     Parent.findOne({ email: req.body.email }, function (err, parent) {
       if (!parent) {
         res
@@ -262,13 +301,13 @@ router.post(
       }
     });
   })
-);
-
+);*/
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     Parent.find({}, function (err, user) {
       console.log(user);
+      res.send(user);
     });
   })
 );
