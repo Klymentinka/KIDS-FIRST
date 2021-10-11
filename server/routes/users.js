@@ -1,4 +1,5 @@
 const express = require("express");
+const crypto = require("crypto");
 const router = express.Router();
 const expressAsyncHandler = require("express-async-handler");
 const Parent = require("../models/parentModel.js");
@@ -256,7 +257,7 @@ router.post(
         const resetToken = parent.createPasswordResetToken();
         await parent.save({ validateBeforeSave: false });
         console.log("have a look at the token", resetToken);
-        const link = `${process.env.BASE_URL}/password-reset/${parent._id}/${resetToken}`;
+        const link = `${process.env.BASE_URL}/reset-password/${resetToken}`;
         console.log("before try catch", link);
         try {
           sendEmail({
@@ -281,27 +282,40 @@ router.post(
   })
 );
 
-/*router.patch(
+router.patch(
   "/reset-password/:token",
   expressAsyncHandler(async (req, res) => {
-    Parent.findOne({ email: req.body.email }, function (err, parent) {
-      if (!parent) {
-        res
-          .status(404)
-          .send("error, No account with that email address exists.");
-        // return //res.redirect("/forgot");
-      } else {
-        const resetToken = parent.createPasswordResetToken();
-        await parent.save({ validateBeforeSave: false });
-        console.log("have a look at the token", resetToken);
-        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
-        sendEmail(user.email, "Password reset", link);
+    //1- Get user based on the token
 
-        res.send("password reset link sent to your email account");
-      }
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const parent = await Parent.findOne({
+      passwordResetToken: hashedToken,
+    });
+
+    console.log("here is the parent", parent);
+    //2- if token has not expired, set the new password
+    if (!parent) {
+      res.status(404).send("Token is invalid or has expired");
+    }
+    //3- Update property changedPasswordAt
+    parent.password = req.body.password;
+    parent.passwordConfirmed = req.body.passwordConfirmed;
+    parent.passwordResetToken = undefined;
+    parent.passwordResetExpires = undefined;
+    const updatedParent = await parent.save();
+
+    //4- Log the user in
+    const newToken = generateToken(updatedParent);
+    res.status(200).send({
+      status: "success",
+      newToken,
     });
   })
-);*/
+);
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {

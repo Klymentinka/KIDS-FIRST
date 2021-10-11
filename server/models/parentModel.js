@@ -21,6 +21,7 @@ const parentSchema = new mongoose.Schema(
     is_family_member: { type: Boolean, default: false, required: true },
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
+    changedPasswordAt: { type: Date },
   },
   {
     timestamps: true,
@@ -28,11 +29,11 @@ const parentSchema = new mongoose.Schema(
 );
 parentSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
-  passwordResetToken = crypto
+  this.passwordResetToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
-  passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
 const Parent = mongoose.model("Parent", parentSchema);
