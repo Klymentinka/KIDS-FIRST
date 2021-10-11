@@ -1,19 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const expressAsyncHandler = require('express-async-handler');
-const Parent = require('../models/parentModel.js');
-const CoParent = require('../models/coParentModel.js');
-const Child = require('../models/childModel.js');
-const Admin = require('../models/adminModel.js');
-const bcrypt = require('bcrypt');
-const generateToken = require('../utils.js');
-const authorize = require("../middleware/authorize")
-const is_parent = require("../middleware/parentAuthorize")
-
-
+const expressAsyncHandler = require("express-async-handler");
+const Parent = require("../models/parentModel.js");
+const CoParent = require("../models/coParentModel.js");
+const Child = require("../models/childModel.js");
+const Admin = require("../models/adminModel.js");
+const bcrypt = require("bcrypt");
+const generateToken = require("../utils.js");
+const authorize = require("../middleware/authorize");
+const is_parent = require("../middleware/parentAuthorize");
 
 router.post(
-  '/parent/register',
+  "/parent/register",
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -21,7 +19,7 @@ router.post(
     //if the user doesn't exist, create it and store it in the the db
     const oldParent = await Parent.findOne({ email });
     if (oldParent) {
-      res.status(401).send({ message: 'User already exists' });
+      res.status(401).send({ message: "User already exists" });
     }
     const parent = new Parent({
       firstName: req.body.firstName,
@@ -41,13 +39,13 @@ router.post(
       is_parent: createdParent.is_parent,
       token: generateToken(createdParent),
     });
-
-
   })
 );
 
 router.post(
-  '/coParent/register', authorize, is_parent,
+  "/coParent/register",
+  authorize,
+  is_parent,
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -55,7 +53,7 @@ router.post(
     //if the user doesn't exist, create it and store it in the the db
     const oldCoParent = await CoParent.findOne({ email });
     if (oldCoParent) {
-      res.status(401).send({ message: 'coParent already exists' });
+      res.status(401).send({ message: "coParent already exists" });
     }
     const coParent = new CoParent({
       firstName: req.body.firstName,
@@ -77,12 +75,13 @@ router.post(
       createBy: createdCoParent.createBy,
       token: generateToken(createdCoParent),
     });
-
   })
 );
 
 router.post(
-  '/child/register', authorize, is_parent,
+  "/child/register",
+  authorize,
+  is_parent,
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -91,7 +90,7 @@ router.post(
 
     const oldChild = await Child.findOne({ email });
     if (oldChild) {
-      res.status(401).send({ message: 'Child already exists' });
+      res.status(401).send({ message: "Child already exists" });
     }
     const child = new Child({
       firstName: req.body.firstName,
@@ -101,7 +100,6 @@ router.post(
       password: bcrypt.hashSync(req.body.password, 8),
       is_child: req.body.is_child,
       createBy: req.body.createBy,
-
     });
     const createdChild = await child.save();
     res.send({
@@ -117,10 +115,8 @@ router.post(
   })
 );
 
-
-
 router.post(
-  '/admin/register',
+  "/admin/register",
   expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
@@ -129,7 +125,7 @@ router.post(
 
     const oldAdmin = await Admin.findOne({ email });
     if (oldAdmin) {
-      res.status(401).send({ message: 'Admin already exists' });
+      res.status(401).send({ message: "Admin already exists" });
     }
     const admin = new Admin({
       firstName: req.body.firstName,
@@ -138,7 +134,6 @@ router.post(
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
       is_admin: req.body.is_admin,
-
     });
     const createdAdmin = await admin.save();
     res.send({
@@ -153,25 +148,24 @@ router.post(
   })
 );
 
-
 router.post(
-  '/admin/signin',
+  "/admin/signin",
   expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    if (email === '' && password === '') {
-      res.status(401).send({ message: 'Please enter Email and Password' });
+    if (email === "" && password === "") {
+      res.status(401).send({ message: "Please enter Email and Password" });
     } else {
       const admin = await Admin.findOne({ email });
       if (!admin) {
-        res.status(401).send({ message: 'Admin with this Email does not exist.' });
+        res
+          .status(401)
+          .send({ message: "Admin with this Email does not exist." });
       } else {
         if (admin) {
-          if (password === '') {
-            res.status(401).send({ message: 'Please Enter Password.' });
+          if (password === "") {
+            res.status(401).send({ message: "Please Enter Password." });
           } else {
-            if (await bcrypt.compare(
-              req.body.password,
-              admin.password)) {
+            if (await bcrypt.compare(req.body.password, admin.password)) {
               res.send({
                 _id: admin._id,
                 email: admin.email,
@@ -179,36 +173,37 @@ router.post(
                 token: generateToken(admin),
               });
             } else {
-              res.status(401).send({ message: 'Password is Incorrect.' });
+              res.status(401).send({ message: "Password is Incorrect." });
             }
           }
         } else {
-          res.status(401).send({ message: 'Invalid Email or Password' });
+          res.status(401).send({ message: "Invalid Email or Password" });
         }
       }
     }
-
-  }));
-
+  })
+);
 
 router.post(
-  '/signin',
+  "/signin",
   expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    if (email === '' && password === '') {
-      res.status(401).send({ message: 'Please enter Email and Password' });
+    if (email === "" && password === "") {
+      res.status(401).send({ message: "Please enter Email and Password" });
     } else {
-      const user = await Parent.findOne({ email }) || await CoParent.findOne({ email });
+      const user =
+        (await Parent.findOne({ email })) ||
+        (await CoParent.findOne({ email }));
       if (!user) {
-        res.status(401).send({ message: 'User with this Email does not exist.' });
+        res
+          .status(401)
+          .send({ message: "User with this Email does not exist." });
       } else {
         if (user) {
-          if (password === '') {
-            res.status(401).send({ message: 'Please Enter Password.' });
+          if (password === "") {
+            res.status(401).send({ message: "Please Enter Password." });
           } else {
-            if (await bcrypt.compare(
-              req.body.password,
-              user.password)) {
+            if (await bcrypt.compare(req.body.password, user.password)) {
               res.send({
                 _id: user._id,
                 email: user.email,
@@ -217,20 +212,21 @@ router.post(
                 token: generateToken(user),
               });
             } else {
-              res.status(401).send({ message: 'Password is Incorrect.' });
+              res.status(401).send({ message: "Password is Incorrect." });
             }
           }
         } else {
-          res.status(401).send({ message: 'Invalid Email or Password' });
+          res.status(401).send({ message: "Invalid Email or Password" });
         }
       }
     }
+  })
+);
 
-  }));
-
-
-router.put('/:id', async (req, res) => {
-  const user = await Parent.findById(req.params.id) || await CoParent.findById(req.params.id);
+router.put("/:id", async (req, res) => {
+  const user =
+    (await Parent.findById(req.params.id)) ||
+    (await CoParent.findById(req.params.id));
   if (user) {
     user.firstName = req.body.firstName || user.firstName;
     user.lastName = req.body.lastName || user.lastName;
@@ -241,13 +237,26 @@ router.put('/:id', async (req, res) => {
     user.is_parent = req.body.is_parent || user.is_parent;
 
     const updateduser = await user.save();
-    res.send({ message: 'user Updated', user: updateduser });
+    res.send({ message: "user Updated", user: updateduser });
   } else {
-    res.status(404).send({ message: 'user Not Found' });
+    res.status(404).send({ message: "user Not Found" });
   }
-}
+});
+router.post(
+  "/forget-password",
+  expressAsyncHandler(async (req, res) => {
+    Parent.findOne({ email: req.body.email }, function (err, user) {
+      if (!user) {
+        res.send("error", "No account with that email address exists.");
+        // return //res.redirect("/forgot");
+      }
+      const token = generateToken(user);
+      const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+      sendEmail(user.email, "Password reset", link);
+
+      res.send("password reset link sent to your email account");
+    });
+  })
 );
 
-
 module.exports = router;
-
