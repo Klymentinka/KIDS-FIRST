@@ -317,6 +317,31 @@ router.patch(
   })
 );
 
+router.post(
+  "/change-password",
+  expressAsyncHandler(async (req, res) => {
+    //1- Get user based on the token
+    const { email, oldPassword, newPassword, newPasswordConfirmed } = req.body;
+    const parent = await Parent.findOne({
+      email: email,
+      password: oldPassword,
+    });
+
+    if (newPassword !== newPasswordConfirmed) {
+      res.send("typed passwords do not match");
+    }
+    if (!parent) {
+      res.status(404).send("the password you typed is incorrect");
+    }
+
+    //3- Update the password and its changed date
+    parent.password = newPassword;
+    parent.changedPasswordAt = Date.now();
+    const updatedParent = await parent.save();
+
+    res.status(200).send("password updated successfully");
+  })
+);
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
