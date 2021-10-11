@@ -6,7 +6,7 @@ const CoParent = require("../models/coParentModel.js");
 const Child = require("../models/childModel.js");
 const Admin = require("../models/adminModel.js");
 const bcrypt = require("bcrypt");
-const generateToken = require("../utils.js");
+const generateToken = require("../utils/generateToken.js");
 const authorize = require("../middleware/authorize");
 const is_parent = require("../middleware/parentAuthorize");
 
@@ -245,16 +245,30 @@ router.put("/:id", async (req, res) => {
 router.post(
   "/forget-password",
   expressAsyncHandler(async (req, res) => {
-    Parent.findOne({ email: req.body.email }, function (err, user) {
-      if (!user) {
-        res.send("error", "No account with that email address exists.");
+    Parent.findOne({ email: req.body.email }, function (err, parent) {
+      if (!parent) {
+        res
+          .status(404)
+          .send("error, No account with that email address exists.");
         // return //res.redirect("/forgot");
-      }
-      const token = generateToken(user);
-      const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
-      sendEmail(user.email, "Password reset", link);
+      } else {
+        const resetToken = parent.createPasswordResetToken();
+        await parent.save({ validateBeforeSave: false });
+        console.log("have a look at the token", resetToken);
+        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+        sendEmail(user.email, "Password reset", link);
 
-      res.send("password reset link sent to your email account");
+        res.send("password reset link sent to your email account");
+      }
+    });
+  })
+);
+
+router.get(
+  "/",
+  expressAsyncHandler(async (req, res) => {
+    Parent.find({}, function (err, user) {
+      console.log(user);
     });
   })
 );
