@@ -2,7 +2,8 @@
   text-align: center;
 }
 
-h1, h2 {
+h1,
+h2 {
   padding: 10px;
 }
 
@@ -13,4 +14,15 @@ h1, h2 {
   height: 600px;
   color: brown;
 }
-
+.startDate {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  gap: 20px;
+}
+.endDate {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  gap: 20px;
+}

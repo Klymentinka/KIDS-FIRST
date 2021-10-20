@@ -2,7 +2,7 @@ import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import {
   Dialog,
@@ -47,33 +47,75 @@ const events = [
 ];
 
 export default function App() {
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({
     title: "",
     start: "",
     end: "",
   });
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
+  const [updatedEvent, setUpdatedEvent] = useState({
+    title: "",
+    start: "",
+    end: "",
+  });
   const [allEvents, setAllEvents] = useState(events);
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.value = "";
+    inputRef.current.focus();
+  }, []);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
-  function handleAddEvent() {
-    setAllEvents([...allEvents, newEvent]);
-  }
-  function convertDate(date) {
-    let convertedDate = date.toString().slice(0, 34); //"Mon Oct 07 2019 00:00:00 GMT-0400"
+  const editEvent = (e) => {
+    e.preventDefault();
+    setShowDialog(false);
+    setEditDialog(true);
+  };
+  const removeEvent = (value) => {
+    setEditDialog(false);
+    setShowDialog(false);
+    setAllEvents(
+      allEvents.filter(function (event) {
+        return event.title !== value;
+      })
+    );
+  };
+  const updateEvent = (value) => {
+    const eventToUpdate = allEvents.findIndex(function (event) {
+      return event.title === selectedEvent.title;
+    });
 
-    let convDate = new Date(convertedDate);
-    console.log("the converted date", convDate);
-    return convDate;
+    const copyEvents = [...allEvents];
+    eventToUpdate !== -1
+      ? (copyEvents[eventToUpdate] = value)
+      : (copyEvents[3] = value);
+    setAllEvents(copyEvents);
+    setEditDialog(false);
+  };
+
+  const deleteEvent = () => setShowDialog(false);
+  function handleAddEvent(event) {
+    setAllEvents([...allEvents, event]);
+
+    setEditDialog(false);
   }
+
+  const formatDate = (date) => {
+    if (date) {
+      const d = new Date(date);
+      return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+    return "";
+  };
   return (
     <div className="App">
       <h1>Calendar</h1>
-
       <h2>Add New Event</h2>
       <div>
         <input
+          ref={inputRef}
           type="text"
           placeholder="Add Title"
           style={{ width: "20%", marginRight: "10px" }}
@@ -92,7 +134,10 @@ export default function App() {
           selected={newEvent.end}
           onChange={(end) => setNewEvent({ ...newEvent, end })}
         />
-        <button stlye={{ marginTop: "10px" }} onClick={handleAddEvent}>
+        <button
+          stlye={{ marginTop: "10px" }}
+          onClick={() => handleAddEvent(newEvent)}
+        >
           Add Event
         </button>
       </div>
@@ -104,28 +149,100 @@ export default function App() {
         style={{ height: 500, margin: "50px" }}
         selectable={true}
         onSelectEvent={(event) => {
+          open();
           setSelectedEvent({
             ...selectedEvent,
             title: event.title,
-            start: convertDate(event.start),
-            end: convertDate(event.end),
+            start: formatDate(event.start),
+            end: formatDate(event.end),
           });
-          console.log(
-            "9bal set",
-            event.title,
-            convertDate(event.start),
-            convertDate(event.end)
-          );
-          open();
-
-          console.log("the selected event", selectedEvent);
         }}
       />
-      <Dialog open={showDialog} onClose={close}>
-        <DialogTitle>{selectedEvent.title}</DialogTitle>
-        <DialogContent>{selectedEvent.start}</DialogContent>
+      {showDialog && (
+        <Dialog
+          open={showDialog}
+          onClose={close}
+          PaperProps={{
+            style: {
+              backgroundColor: "gray",
+              color: "black",
+              fontFamily: "cursive",
+              height: "300px",
+              width: "600px",
+            },
+          }}
+        >
+          <DialogTitle style={{ color: "darkblue" }}>
+            <div>{selectedEvent.title}</div>
+            <hr />
+          </DialogTitle>
+          <DialogContent>
+            <div className="startDate">
+              <div style={{ fontSize: "20px", color: "blue" }}>
+                start date :
+              </div>
+              <div> {selectedEvent.start}</div>
+            </div>
+            <div className="endDate">
+              <div style={{ fontSize: "20px", color: "blue" }}> end date: </div>
+              <div> {selectedEvent.end}</div>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={(e) => editEvent(e)}>Edit</Button>
+            <Button onClick={() => removeEvent(selectedEvent.title)}>
+              Delete
+            </Button>
+            <Button onClick={close}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      )}
+
+      <Dialog
+        open={editDialog}
+        onClose={close}
+        PaperProps={{
+          style: {
+            backgroundColor: "gray",
+            color: "black",
+            fontFamily: "cursive",
+            height: "300px",
+            width: "600px",
+          },
+        }}
+      >
+        <DialogTitle style={{ color: "darkblue" }}>
+          edit your event
+          <hr />
+        </DialogTitle>
+        <DialogContent>
+          <input
+            type="text"
+            placeholder="event title"
+            style={{ width: "20%", marginRight: "10px" }}
+            value={updatedEvent.title}
+            onChange={(e) =>
+              setUpdatedEvent({ ...updatedEvent, title: e.target.value })
+            }
+          />
+          <DatePicker
+            placeholderText="Start Date"
+            style={{ marginRight: "10px" }}
+            selected={updatedEvent.start}
+            onChange={(start) => {
+              setUpdatedEvent({ ...updatedEvent, start });
+            }}
+          />
+          <DatePicker
+            placeholderText="End Date"
+            selected={updatedEvent.end}
+            onChange={(end) => {
+              setUpdatedEvent({ ...updatedEvent, end });
+            }}
+          />
+        </DialogContent>
         <DialogActions>
-          <Button onClick={close}>Close</Button>
+          <Button onClick={() => updateEvent(updatedEvent)}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>
