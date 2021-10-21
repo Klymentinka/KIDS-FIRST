@@ -700,7 +700,7 @@ input#addChildCheck {
   gap: 8px;
 }
 
-.profile-nav-buttons > a {
+.profile-nav-buttons > button {
   box-sizing: border-box;
   padding-top: 15px;
   padding-bottom: 15px;

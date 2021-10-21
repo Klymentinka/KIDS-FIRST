@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import logo from '../img/kids_first_logo_beta.png'
 import my_info_placeholder from '../img/my-info-placeholder.png'
+import { updateUserInfo } from '../actions/userActions';
 
 
 
-export default function MyInfo() {
+export default function MyInfo(props) {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+
+    const userRegister = useSelector((state) => state.userRegister);
+    const { userInfo } = userRegister;
+    const dispatch = useDispatch();
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        dispatch(updateUserInfo({ id: userInfo._id, firstName, lastName, dateOfBirth }));
+        props.history.push('/CoParentInfo');
+    };
+
     return (
         <div>
             <header>
@@ -33,24 +50,24 @@ export default function MyInfo() {
                 <div class="tab-content" id="accountInfoTabContent">
                     <div class="tab-pane show active" id="my_info" role="tabpanel" aria-labelledby="my_info_tab">
                         <div class="profile-form col-4">
-                            <form class="info-form" method="post" action="/pages/co-parent_info.html">
+                            <form class="info-form" onSubmit={submitHandler}>
                                 <div class="flex-item">
                                     <div class="mb-2">
                                         <label for="userFirstName" class="form-label">First name</label>
-                                        <input type="text" class="form-control" id="userFirstName" required />
+                                        <input type="text" class="form-control" id="userFirstName" onChange={(e) => setFirstName(e.target.value)} required />
                                     </div>
                                     <div class="mb-2">
                                         <label for="userLastName" class="form-label">Last name</label>
-                                        <input type="text" class="form-control" id="userLastName" required />
+                                        <input type="text" class="form-control" id="userLastName" onChange={(e) => setLastName(e.target.value)} required />
                                     </div>
                                     <div class="mb-2">
                                         <label for="userDob" class="form-label">Date of birth (optional)</label>
-                                        <input type="date" class="form-control" id="userDob" />
+                                        <input type="date" class="form-control" id="userDob" onChange={(e) => setDateOfBirth(e.target.value)} />
                                     </div>
                                 </div>
                                 <div class="profile-nav-buttons">
-                                    <a type="button" class="btn" id="back-btn" href="#">Back</a>
-                                    <a type="submit" class="btn" id="next-btn"  href="/CoParentInfo">Next step</a>
+                                    <button type="button" class="btn" id="back-btn" href="#">Back</button>
+                                    <button type="submit" class="btn" id="next-btn" href="#">Next step</button>
                                 </div>
                             </form>
                         </div>
