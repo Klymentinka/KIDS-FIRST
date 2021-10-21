@@ -1,0 +1,33 @@
+main {
+  display: flex;
+  flex-direction: row;
+  flex: 2 1;
+}
+
+.DashboardCalendar {
+  display: unset;
+  width: 75%;
+}
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color";
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border: unset;
+}
+.rbc-timeslot-group:nth-child(4n + 1),
+.rbc-timeslot-group:nth-child(4n + 2),
+.rbc-timeslot-group:nth-child(4n + 3),
+.rbc-timeslot-group:nth-child(4n + 4) {
+  /* or 4n+1 */
+  background-color: #fefefe;
+  border-width: 0px;
+  margin: 0;
+  padding: 0;
+  border-color: black;
+}
+
+.rbc-timeslot-group:nth-child(4n + 1) {
+  border-top: 1px solid #ccc;
+}
