@@ -5,6 +5,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import ChildInfo from './screens/ChildInfo';
 import MyInfo from './screens/MyInfo';
 import CoParentInfo from './screens/CoParentInfo';
+import Dashboard from './screens/Dashboard';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
       <Route path="/CoParentInfo" component={CoParentInfo} />
       <Route path="/ChildInfo" component={ChildInfo} />
       <Route path="/MyInfo" component={MyInfo} />
+      <Route path="/dashboard" component={Dashboard}/>
+
     </BrowserRouter>
   );
 }

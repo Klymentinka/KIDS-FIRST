@@ -48,7 +48,7 @@ export default function ChildInfo() {
             </div>
             <div class="profile-nav-buttons">
               <a type="button" class="btn" id="back-btn" href="/CoParentInfo">Back</a>
-              <a type="button" class="btn" id="next-btn" href="/dashbard">Next step</a>
+              <a type="button" class="btn" id="next-btn" href="/dashboard">Next step</a>
             </div>
           </form>
         </div>
