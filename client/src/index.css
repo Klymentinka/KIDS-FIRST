@@ -871,3 +871,54 @@ margin-top: 0px;
   margin-left: 4px;
   margin-top: -10px;
 }
+
+/*Style for dashboard-childinfo*/
+.dashboardChildinfo{
+  width: 50%;
+  margin-left: 20%;
+  margin-top: -800px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.childInfoBox{
+  width: 50%;
+  margin-left: 20%;
+  height: 400px;
+  padding: 50px;
+  border-radius: 10px;
+  border: 1px solid #ACD7D9;
+  background: #F8F6E4;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.editButton{
+  height: 35px;
+  width: 70px;
+}
+
+.input-height{
+  height: 25px;
+}
+
+.input-width{
+  width: 225px;
+}
+
+.space-around{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.input-one{
+  width: 100px;
+}
+
+.input-two{
+  width: 500px;
+}
