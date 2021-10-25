@@ -1,16 +1,26 @@
-import React from 'react';
+import {React, useState} from 'react';
 import {CButton, CCol, CContainer, CRow} from '@coreui/react';
 import {Container, Row, Col, Form} from 'react-bootstrap';
 
 const AccessChildInfo = () =>{
+  const [isDisabled, setIsDisabled ] = useState(true);
+
+  const handleEdit = () =>{
+    setIsDisabled(false);
+  };
+
   return(
-      <>
+    <Container>
+      <Row>
+        <Col md={{ span: 11, offset: 11 }}>
+          <CButton className="addButton">Add Child</CButton>
+        </Col>
+        </Row>
       <p className="dashboardChildinfo"><b>My Children</b></p>
       <div className="childInfoBox">
-        <Container>
         <Row>
           <Col md={{ span: 11, offset: 11 }}>
-            <CButton className="editButton">Edit</CButton>
+            <CButton className="editButton" onClick={handleEdit}>Edit</CButton>
           </Col>
         </Row>
         <Row className="space-around">
@@ -19,7 +29,7 @@ const AccessChildInfo = () =>{
               <Form.Group>
                 <Form.Label>First Name</Form.Label>
                 <div className="input-width">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form>
@@ -29,7 +39,7 @@ const AccessChildInfo = () =>{
               <Form.Group>
                 <Form.Label>Date of Birth</Form.Label>
                 <div className="input-width">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -41,7 +51,7 @@ const AccessChildInfo = () =>{
               <Form.Group>
                 <Form.Label>Last Name</Form.Label>
                 <div className="input-width">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form>
@@ -51,7 +61,7 @@ const AccessChildInfo = () =>{
               <Form.Group>
                 <Form.Label>Address</Form.Label>
                 <div className="input-width">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -63,7 +73,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form>
@@ -72,7 +82,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -81,7 +91,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-two">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -92,7 +102,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form>
@@ -101,7 +111,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -110,7 +120,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-two">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -121,7 +131,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form>
@@ -130,7 +140,7 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-one">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
@@ -139,15 +149,14 @@ const AccessChildInfo = () =>{
             <Form>
               <Form.Group>
                 <div className="input-two">
-                <Form.Control className="input-height"/>
+                <Form.Control className="input-height" disabled={isDisabled}/>
                 </div>
               </Form.Group>
             </Form> 
           </Col>
         </Row>
-        </Container>
       </div>
-      </>
+    </Container> 
   );
 };
 
