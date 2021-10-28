@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Dropdown } from 'react-bootstrap'
 import logo from '../img/kids_first_logo_beta.png'
 import value_1 from '../img/value_1.png'
 import value_2 from '../img/value_2.png'
@@ -18,7 +19,7 @@ export default function Home() {
                 <div class="banner-img">
                     <img src={kidsfirst_intro_1} alt="" />
                 </div>
-                <nav>
+                <div class="header-nav">
                     <div class="site-nav">
                         <img src={logo} alt="" />
                         <div class="nav-links">
@@ -28,22 +29,20 @@ export default function Home() {
                         </div>
                     </div>
                     <div class="profile-nav">
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="langMenu" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">EN</button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="langMenu">
-                                <button class="dropdown-item" type="button">English</button>
-                                <button class="dropdown-item" type="button">French</button>
-                            </div>
-                        </div>
-                        <a className="login-btn btn" href="/Signin">Log in</a>
-                        <a className="signup-btn btn" href="/Signup">Sign up</a>
+                        <Dropdown>
+                            <Dropdown.Toggle className="lang-menu" id="langDropdown" size="sm">EN</Dropdown.Toggle>
+                            <Dropdown.Menu className="lang-menu">
+                                <Button type="button" className="lang-option">FR</Button>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button className="home-login-btn" href="/Signin">Log in</Button>
+                        <Button className="home-signup-btn" href="/Signup">Sign up</Button>
                     </div>
-                </nav>
+                </div>
                 <div class="left-blurb">
                     <h1>A family solution application</h1>
                     <p>Bring harmony in your children's lives with the help of one click</p>
-                    <a class="btn btn-primary" id="btn-signup" href="/Signup">Sign up now</a>
+                    <Button className="home-signup-btn-2" href="/Signup">Sign up now</Button>
                 </div>
             </header>
             <section class="site-section">

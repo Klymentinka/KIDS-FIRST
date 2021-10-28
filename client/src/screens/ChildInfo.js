@@ -1,63 +1,87 @@
 import React from 'react'
-import child_info_placeholder from '../img/child-info-placeholder-1.png'
+import { Navbar, Tabs, Tab, ButtonGroup, Button, Form } from 'react-bootstrap';
+import child_info_placeholder from '../img/child-info-placeholder.png'
 import logo from '../img/kids_first_logo_beta.png'
 
 export default function ChildInfo() {
     return (
-        <div>
-             <header>
-    <div class="site-header">
-      <img src={logo} alt=""/>
-      <div class="header-title">Welcome...</div>
-    </div>
-  </header>
-  <div class="profile-tabs">
-    <ul class="nav nav-tabs nav-fill" id="accountInfoTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link disabled profile-header" id="my_info_tab" data-bs-toggle="tab" data-bs-target="#"
-          type="button" role="tab" aria-controls="my_info" aria-selected="true">My Information</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link disabled profile-header" id="co-parent_info_tab" data-bs-toggle="tab"
-          data-bs-target="#profile" type="button" role="tab" aria-controls="co-parent_info"
-          aria-selected="false">Co-parent Information</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active profile-header" id="child_info_tab" data-bs-toggle="tab"
-          data-bs-target="#contact" type="button" role="tab" aria-controls="child_info" aria-selected="false">Child
-          Information</button>
-      </li>
-    </ul>
-    <div class="tab-content" id="accountInfoTabContent">
-      <div class="tab-pane show active" id="child_info" role="tabpanel" aria-labelledby="child_info_tab">
-        <div class="profile-form col-4">
-          <form class="info-form">
-            <div class="flex-item">
-              <div class="mb-2">
-                <label for="childFirstName" class="form-label">First name</label>
-                <input type="text" class="form-control" id="childFirstName" required/>
-              </div>
-              <div class="mb-2">
-                <label for="childLastName" class="form-label">Last name</label>
-                <input type="text" class="form-control" id="childLastName" required/>
-              </div>
-              <div class="mb-3 form-check">
-                <input type="button" class="form-check-input" id="childCheck"/>
-                <label class="form-check-label" for="childCheck">Add another child</label>
-              </div>
-            </div>
-            <div class="profile-nav-buttons">
-              <a type="button" class="btn" id="back-btn" href="/CoParentInfo">Back</a>
-              <a type="button" class="btn" id="next-btn" href="/dashbard">Next step</a>
-            </div>
-          </form>
-        </div>
-        <div class="placeholder-photo col-8">
-          <img src={child_info_placeholder} alt=""/>
-        </div>
-      </div>
-    </div>
-  </div> 
-        </div>
+        <>
+            <Navbar>
+                <Navbar.Brand href="/" className="profile-update-header"><img src={logo} className="logo" alt="" />Welcome!</Navbar.Brand>
+            </Navbar>
+            <Tabs fill justify defaultActiveKey="childInfo" className="profile-tabs">
+                <Tab eventKey="myInfo" title="My Information" className="profile-header" disabled></Tab>
+                <Tab eventKey="coParentInfo" title="Invite Co-parent" className="profile-header" disabled></Tab>
+                <Tab eventKey="childInfo" title="Child Information" className="profile-header">
+                    <Tab.Pane className="active-profile-update" id="childInfo" active>
+                        <div class="profile-form col-4">
+                            <ChildInfoForm />
+                        </div>
+                        <div class="placeholder-photo placeholder-photo-center col-8">
+                            <img src={child_info_placeholder} alt=""/>
+                        </div>
+                    </Tab.Pane>
+                </Tab>                
+            </Tabs>
+        </>
     )
+}
+
+class ChildInfoForm extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+          name: "",
+          extraChildCount: 0,
+          invalidForm: true
+        };
+    }
+    
+    nameHandle(e) {
+        this.setState({ name: e.target.value })
+        this.setState({ invalidForm: !this.state.name })
+    }
+
+    addChildHandle() {
+        this.setState({ extraChildCount: this.state.extraChildCount + 1 })
+    }
+
+    deleteChildHandle() {
+        this.setState({ extraChildCount: this.state.extraChildCount - 1 })
+    }
+
+    render() {
+        return (
+            <Form className="info-form">
+                <div>
+                    <Form.Group className="form-inputs mb-2">
+                        <label class="form-label">Child name</label>
+                        <input type="text" class="form-input" id="childName" value={this.state.name} onChange={this.nameHandle.bind(this)} required/>
+                    </Form.Group>
+                    {
+                        new Array(this.state.extraChildCount).fill(0).map((_,index) => 
+                            <div class="extra-child">
+                                <hr/>
+                                <div class="delete-child">
+                                    <input type="button" id="deleteChildCheck" onClick={this.deleteChildHandle.bind(this)} />
+                                </div>
+                                <Form.Group className="form-inputs mb-2">
+                                    <label class="form-label">Child name</label>
+                                    <input type="text" class="form-input" value="" />
+                                </Form.Group>
+                            </div>
+                        )
+                    }
+                    <div class="mb-3">
+                        <input type="button" id="addChildCheck" onClick={this.addChildHandle.bind(this)} />
+                        <label class="add-child-label" for="addChildCheck">Add another child</label>
+                    </div>
+                </div>
+                <ButtonGroup className="profile-nav-buttons">
+                    <Button className="back-btn" href="/CoParentInfo">Back</Button>
+                    <Button type="submit" className="next-btn" disabled={this.state.invalidForm}>Done</Button>
+                </ButtonGroup>
+            </Form>
+        )
+    }
 }
