@@ -4,6 +4,9 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+
+import * as BsIcons from "react-icons/bs";
+
 import {
   Dialog,
   DialogActions,
@@ -83,21 +86,26 @@ export default function DashboardCalendar() {
       })
     );
   };
-  const updateEvent = (value) => {
+  const updateEvent = () => {
     const eventToUpdate = allEvents.findIndex(function (event) {
       return event.title === selectedEvent.title;
     });
 
     const copyEvents = [...allEvents];
     eventToUpdate !== -1
-      ? (copyEvents[eventToUpdate] = value)
-      : (copyEvents[3] = value);
+      ? (copyEvents[eventToUpdate] = updatedEvent)
+      : (copyEvents[3] = updatedEvent);
     setAllEvents(copyEvents);
     setEditDialog(false);
   };
 
   const deleteEvent = () => setShowDialog(false);
   function handleAddEvent() {
+    if (!newEvent.title) return alert("please give a title to the event");
+    if (!newEvent.start || !newEvent.end)
+      return alert("please select start and end dates");
+    if (newEvent.start > newEvent.end)
+      return alert("end date must be larger than start date");
     setAllEvents([...allEvents, newEvent]);
 
     setAddDialog(false);
@@ -113,6 +121,18 @@ export default function DashboardCalendar() {
   };
   return (
     <div className="DashboardCalendar">
+      <div className="addEvent">
+        <BsIcons.BsPlusSquare
+          method="dialog"
+          onClick={() => openAdd()}
+          style={{
+            position: "relative",
+            height: "50px",
+            width: "50px",
+          }}
+        />
+      </div>
+
       <Calendar
         localizer={localizer}
         events={allEvents}
@@ -120,10 +140,6 @@ export default function DashboardCalendar() {
         endAccessor="end"
         style={{ height: "500px", margin: "50px", width: "100%" }}
         selectable={true}
-        onSelectSlot={(event) => {
-          console.log("event on selected slot", event);
-          openAdd();
-        }}
         onSelectEvent={(event) => {
           openShow();
           setSelectedEvent({
@@ -136,51 +152,59 @@ export default function DashboardCalendar() {
       />
       {addDialog && (
         <Dialog
-          open={addDialog}
-          onClose={closeAdd}
           PaperProps={{
             style: {
-              backgroundColor: "gray",
-              color: "black",
-              fontFamily: "cursive",
-              height: "500px",
-              width: "600px",
+              minHeight: "60vh",
+              maxHeight: "60vh",
             },
           }}
+          open={addDialog}
+          onClose={closeAdd}
+          fullWidth
         >
-          <DialogTitle style={{ color: "darkblue" }}>
+          <DialogTitle className="DialogTitle">
             <div>Add event</div>
-            <hr />
           </DialogTitle>
-          <DialogContent>
-            <div>title:</div>
-            <input
-              type="text"
-              ref={inputRef}
-              placeholder="event title"
-              style={{ width: "20%", marginRight: "10px" }}
-              value={newEvent.title}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, title: e.target.value })
-              }
-            />
-            <div>start date:</div>
-            <DatePicker
-              placeholderText="Start Date"
-              style={{ marginRight: "10px" }}
-              selected={newEvent.start}
-              onChange={(start) => {
-                setNewEvent({ ...newEvent, start });
-              }}
-            />
-            <div>end date:</div>
-            <DatePicker
-              placeholderText="End Date"
-              selected={newEvent.end}
-              onChange={(end) => {
-                setNewEvent({ ...newEvent, end });
-              }}
-            />
+          <DialogContent className="DialogContent">
+            <div className="wrapper">
+              <div className="label">title:</div>
+              <div>
+                <input
+                  type="text"
+                  ref={inputRef}
+                  placeholder="event title"
+                  style={{ width: "50%" }}
+                  value={newEvent.title}
+                  onChange={(e) =>
+                    setNewEvent({ ...newEvent, title: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="wrapper">
+              <div className="label">start date:</div>
+              <div className="input">
+                <DatePicker
+                  placeholderText="Start Date"
+                  selected={newEvent.start}
+                  onChange={(start) => {
+                    setNewEvent({ ...newEvent, start });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="wrapper">
+              <div className="label">end date:</div>
+              <div className="input">
+                <DatePicker
+                  placeholderText="End Date"
+                  selected={newEvent.end}
+                  onChange={(end) => {
+                    setNewEvent({ ...newEvent, end });
+                  }}
+                />
+              </div>
+            </div>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleAddEvent}>Add</Button>
@@ -188,34 +212,28 @@ export default function DashboardCalendar() {
           </DialogActions>
         </Dialog>
       )}
-
       {showDialog && (
         <Dialog
           open={showDialog}
           onClose={closeShow}
           PaperProps={{
             style: {
-              backgroundColor: "gray",
-              color: "black",
-              fontFamily: "cursive",
-              height: "500px",
-              width: "600px",
+              minHeight: "60vh",
+              maxHeight: "60vh",
             },
           }}
+          fullWidth
         >
-          <DialogTitle style={{ color: "darkblue" }}>
+          <DialogTitle className="DialogTitle">
             <div>{selectedEvent.title}</div>
-            <hr />
           </DialogTitle>
-          <DialogContent>
-            <div className="startDate">
-              <div style={{ fontSize: "20px", color: "blue" }}>
-                start date :
-              </div>
+          <DialogContent className="DialogContent">
+            <div className="wrapper">
+              <div className="label">start date :</div>
               <div> {selectedEvent.start}</div>
             </div>
-            <div className="endDate">
-              <div style={{ fontSize: "20px", color: "blue" }}> end date: </div>
+            <div className="wrapper">
+              <div className="label"> end date: </div>
               <div> {selectedEvent.end}</div>
             </div>
           </DialogContent>
@@ -228,53 +246,61 @@ export default function DashboardCalendar() {
           </DialogActions>
         </Dialog>
       )}
-
       <Dialog
         open={editDialog}
         onClose={closeEdit}
         PaperProps={{
           style: {
-            backgroundColor: "gray",
-            color: "black",
-            fontFamily: "cursive",
-            height: "500px",
-            width: "600px",
+            minHeight: "60vh",
+            maxHeight: "60vh",
           },
         }}
+        fullWidth
       >
-        <DialogTitle style={{ color: "darkblue" }}>
-          edit your event
-          <hr />
-        </DialogTitle>
-        <DialogContent>
-          <input
-            type="text"
-            ref={inputRef}
-            placeholder="event title"
-            style={{ width: "20%", marginRight: "10px" }}
-            value={updatedEvent.title}
-            onChange={(e) =>
-              setUpdatedEvent({ ...updatedEvent, title: e.target.value })
-            }
-          />
-          <DatePicker
-            placeholderText="Start Date"
-            style={{ marginRight: "10px" }}
-            selected={updatedEvent.start}
-            onChange={(start) => {
-              setUpdatedEvent({ ...updatedEvent, start });
-            }}
-          />
-          <DatePicker
-            placeholderText="End Date"
-            selected={updatedEvent.end}
-            onChange={(end) => {
-              setUpdatedEvent({ ...updatedEvent, end });
-            }}
-          />
+        <DialogTitle className="DialogTitle">edit your event</DialogTitle>
+        <DialogContent className="DialogContent">
+          <div className="wrapper">
+            <div className="label">title</div>
+            <div className="input">
+              <input
+                type="text"
+                placeholder="event title"
+                value={
+                  updatedEvent.title ? updatedEvent.title : selectedEvent.title
+                }
+                onChange={(e) =>
+                  setUpdatedEvent({ ...updatedEvent, title: e.target.value })
+                }
+              />
+            </div>
+          </div>
+          <div className="wrapper">
+            <div className="label">start date</div>
+            <div className="input">
+              <DatePicker
+                placeholderText="Start Date"
+                selected={updatedEvent.start}
+                onChange={(start) => {
+                  setUpdatedEvent({ ...updatedEvent, start });
+                }}
+              />
+            </div>
+          </div>
+          <div className="wrapper">
+            <div className="label">end date</div>
+            <div className="input">
+              <DatePicker
+                placeholderText="End Date"
+                selected={updatedEvent.end}
+                onChange={(end) => {
+                  setUpdatedEvent({ ...updatedEvent, end });
+                }}
+              />
+            </div>
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => updateEvent(updatedEvent)}>Save</Button>
+          <Button onClick={updateEvent}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>
