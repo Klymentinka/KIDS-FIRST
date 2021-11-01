@@ -301,6 +301,7 @@ export default function DashboardCalendar() {
         </DialogContent>
         <DialogActions>
           <Button onClick={updateEvent}>Save</Button>
+          <Button onClick={closeEdit}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </div>
