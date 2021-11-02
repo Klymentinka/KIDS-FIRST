@@ -554,7 +554,14 @@ footer a, footer a:hover {
   
 
   /* update profile */
-
+  .form-check-input:checked {
+    background-color: #F08324 !important;
+    border-color: #0d6efd !important;
+}
+.form-check-input {
+  background-color: white !important;
+  border-color: black !important;
+}
 .site-header {
   display: flex;
   align-items: center;
@@ -700,7 +707,7 @@ input#addChildCheck {
   gap: 8px;
 }
 
-.profile-nav-buttons > a {
+.profile-nav-buttons > button {
   box-sizing: border-box;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -870,4 +877,79 @@ margin-top: 0px;
   height: 38px;
   margin-left: 4px;
   margin-top: -10px;
+}
+
+.DashboardCalendar{
+  width: 70%;
+  margin-left: 20%;
+  margin-top: -700px;
+}
+.addEvent {
+  display: flex;
+  align-self: flex-end;
+  align-content: space-around;
+  margin-left: "20px";
+  margin-top: "20px";
+  margin-bottom: "20px";
+}
+Dialog {
+  display: flex;
+  align-content: flex-start;
+  background-color: white;
+  border: solid gray 1px;
+  border-radius: 10px;
+  box-shadow: none;
+  margin-top: 10px;
+  padding: 15px;
+  float: left;
+}
+.DialogTitle {
+  color: gray;
+  font-family: "Trocchi", serif;
+  font-size: 46px;
+  font-weight: 100;
+  line-height: 50px;
+  letter-spacing: 1px;
+  padding: 0 0 40px;
+  float: inline-start;
+  border-bottom: double gray;
+}
+.DialogContent {
+  padding: 10px 12px;
+  text-align: left;
+  align-self: flex-start;
+  font-size: 13px;
+  margin: 10px;
+  color: #111;
+  font-family: "Trocchi", serif;
+  font-size: 16px;
+  line-height: 28px;
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+}
+.input {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+input {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+input[type="text"]:focus {
+  border: 3px solid #555;
+  background-color: lightgray;
+}
+.label {
+  color: gray;
+  font-family: "Trocchi", serif;
+  font-size: 24px;
+  font-weight: normal;
+
+  margin: 0;
+}
+DatePicker {
+  font-size: 1em;
 }

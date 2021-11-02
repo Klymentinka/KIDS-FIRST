@@ -6,6 +6,7 @@ import ChildInfo from './screens/ChildInfo';
 import MyInfo from './screens/MyInfo';
 import CoParentInfo from './screens/CoParentInfo';
 import Dashboard from './screens/Dashboard';
+import calender from './screens/Calender';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/ChildInfo" component={ChildInfo} />
       <Route path="/MyInfo" component={MyInfo} />
       <Route path="/dashboard" component={Dashboard}/>
+      <Route path="/dashboard/calender" component={calender}/>
 
     </BrowserRouter>
   );
