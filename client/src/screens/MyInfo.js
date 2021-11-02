@@ -22,6 +22,12 @@ export default function MyInfo(props) {
         props.history.push('/CoParentInfo');
     };
 
+    const handleBack = (e) => {
+        e.preventDefault();
+        props.history.push('/Signup');
+    };
+
+
     return (
         <div>
             <header>
@@ -54,11 +60,11 @@ export default function MyInfo(props) {
                                 <div class="flex-item">
                                     <div class="mb-2">
                                         <label for="userFirstName" class="form-label">First name</label>
-                                        <input type="text" class="form-control" id="userFirstName" onChange={(e) => setFirstName(e.target.value)} required />
+                                        <input type="text" class="form-control" id="userFirstName" onChange={(e) => setFirstName(e.target.value)}  />
                                     </div>
                                     <div class="mb-2">
                                         <label for="userLastName" class="form-label">Last name</label>
-                                        <input type="text" class="form-control" id="userLastName" onChange={(e) => setLastName(e.target.value)} required />
+                                        <input type="text" class="form-control" id="userLastName" onChange={(e) => setLastName(e.target.value)}  />
                                     </div>
                                     <div class="mb-2">
                                         <label for="userDob" class="form-label">Date of birth (optional)</label>
@@ -66,8 +72,8 @@ export default function MyInfo(props) {
                                     </div>
                                 </div>
                                 <div class="profile-nav-buttons">
-                                    <button type="button" class="btn" id="back-btn" href="#">Back</button>
-                                    <button type="submit" class="btn" id="next-btn" href="#">Next step</button>
+                                    <button type="button" class="btn" id="back-btn" onClick={handleBack}>Back</button>
+                                    <button type="submit" class="btn" id="next-btn" >Next step</button>
                                 </div>
                             </form>
                         </div>
