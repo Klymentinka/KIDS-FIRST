@@ -5,6 +5,7 @@ import signup from '../img/signup.png';
 import { Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { register } from '../actions/userActions';
+//import { Link } from "react-router-dom";// Connecting  the authentication pages
 
 export default function Signup(props) {
   const [email, setEmail] = useState('');
@@ -83,9 +84,11 @@ export default function Signup(props) {
             </button>
 
           </form>
+         
         </div>
       </div>
     </>
 
   )
 }
+

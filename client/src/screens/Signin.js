@@ -66,7 +66,7 @@ export default function Signin(props) {
                   />
                 </div>
                 <div class="checkbox mb-3">
-                <a className=" btn forget-password" href="#">Forgot your password?</a>
+                <a className=" btn forget-password" href="/forgot-password/index">Forgot your password?</a>
 
     </div>
 
@@ -88,6 +88,7 @@ export default function Signin(props) {
                   </Col>
                 </Row>
               </form>
+              
     
             </div>
           </div>

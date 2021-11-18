@@ -92,3 +92,5 @@ export const registerChild = (firstName,is_child, createBy) => async (dispatch, 
     });
   }
 };
+// forgot password
+
