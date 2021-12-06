@@ -80,15 +80,15 @@ class MyInfoForm extends React.Component {
                 <div>
                     <Form.Group className="form-inputs mb-2">
                         <label for="userFirstName" class="form-label">First name</label>
-                        <input type="text" class="form-input" id="userFirstName" value={this.state.firstName} onChange={this.firstNameHandle.bind(this)} required />
+                        <input type="text" class="form-input" id="userFirstName" placeholder="Enter your First Name" value={this.state.firstName} onChange={this.firstNameHandle.bind(this)} required />
                     </Form.Group>
                     <Form.Group className="form-inputs mb-2">
                         <label for="userLastName" class="form-label">Last name</label>
-                        <input type="text" class="form-input" id="userLastName" value={this.state.lastName} onChange={this.lastNameHandle.bind(this)} required />
+                        <input type="text" class="form-input" id="userLastName" placeholder="Enter your Last Name" value={this.state.lastName} onChange={this.lastNameHandle.bind(this)} required />
                     </Form.Group>
                     <Form.Group className="form-inputs mb-2">
-                        <label for="userDob" class="form-label" onChange={this.dateOfBirthHandle.bind(this)}>Date of birth (optional)</label>
-                        <input type="date" class="form-input" id="userDob" value="" />
+                        <label for="userDob" class="form-label"  >Date of birth (optional)</label>
+                        <input type="date" class="form-input" id="userDob" value={this.state.dateOfBirth} onChange={this.dateOfBirthHandle.bind(this)} />
                     </Form.Group>
                 </div>
                 <ButtonGroup className="profile-nav-buttons">

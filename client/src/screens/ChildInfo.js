@@ -34,10 +34,10 @@ export default function ChildInfo(props) {
                 <Tab eventKey="coParentInfo" title="Invite Co-parent" className="profile-header" disabled></Tab>
                 <Tab eventKey="childInfo" title="Child Information" className="profile-header">
                     <Tab.Pane className="active-profile-update" id="childInfo" active>
-                        <div class="profile-form col-4">
+                        <div className="profile-form col-4">
                             <ChildInfoForm />
                         </div>
-                        <div class="placeholder-photo placeholder-photo-center col-8">
+                        <div className="placeholder-photo placeholder-photo-center col-8">
                             <img src={child_info_placeholder} alt="" />
                         </div>
                     </Tab.Pane>
@@ -72,34 +72,34 @@ class ChildInfoForm extends React.Component {
 
     render() {
         return (
-            <Form className="info-form">
+            <Form className="info-form" method="post">
                 <div>
                     <Form.Group className="form-inputs mb-2">
-                        <label class="form-label">Child name</label>
-                        <input type="text" class="form-input" id="childName" value={this.state.name} onChange={this.nameHandle.bind(this)} required />
+                        <label className="form-label">Child name</label>
+                        <input type="text" className="form-input" id="childName"  placeholder="Enter your Child's Name" value={this.state.name} onChange={this.nameHandle.bind(this)} required />
                     </Form.Group>
                     {
                         new Array(this.state.extraChildCount).fill(0).map((_, index) =>
-                            <div class="extra-child">
+                            <div className="extra-child">
                                 <hr />
-                                <div class="delete-child">
+                                <div className="delete-child">
                                     <input type="button" id="deleteChildCheck" onClick={this.deleteChildHandle.bind(this)} />
                                 </div>
                                 <Form.Group className="form-inputs mb-2">
-                                    <label class="form-label">Child name</label>
-                                    <input type="text" class="form-input" />
+                                    <label className="form-label">Child name</label>
+                                    <input type="text" className="form-input" />
                                 </Form.Group>
                             </div>
                         )
                     }
-                    <div class="mb-3">
+                    <div className="mb-3">
                         <input type="button" id="addChildCheck" onClick={this.addChildHandle.bind(this)} />
-                        <label class="add-child-label" for="addChildCheck">Add another child</label>
+                        <label className="add-child-label" for="addChildCheck">Add another child</label>
                     </div>
                 </div>
                 <ButtonGroup className="profile-nav-buttons">
                     <Button className="back-btn" href="/CoParentInfo">Back</Button>
-                    <Button type="submit" className="next-btn" disabled={this.state.invalidForm}>Done</Button>
+                    <Button type="submit" className="next-btn" href='/dashboard' disabled={this.state.invalidForm}>Done</Button>
                 </ButtonGroup>
             </Form>
         )

@@ -94,15 +94,15 @@ class CoParentInfoForm extends React.Component {
                 <fieldset disabled={this.state.skipForm}>
                     <Form.Group className="form-inputs mb-2">
                         <label for="co-parentFirstName" class="form-label">First name</label>
-                        <input type="text" class="form-input" id="co-parentFirstName" value={this.state.firstName} onChange={this.firstNameHandle.bind(this)}/>
+                        <input type="text" class="form-input" id="co-parentFirstName"  placeholder="Enter your First Name" value={this.state.firstName} onChange={this.firstNameHandle.bind(this)}/>
                     </Form.Group>
                     <Form.Group className="form-inputs mb-2">
                         <label for="co-parentLastName" class="form-label">Last name</label>
-                        <input type="text" class="form-input" id="co-parentLastName" value={this.state.lastName} onChange={this.lastNameHandle.bind(this)}/>
+                        <input type="text" class="form-input" id="co-parentLastName"   placeholder="Enter your Last Name"value={this.state.lastName} onChange={this.lastNameHandle.bind(this)}/>
                     </Form.Group>
                     <Form.Group className="form-inputs mb-2">
                         <label for="co-parentEmail" class="form-label">Email address</label>
-                        <input type="email" class="form-input" id="co-parentEmail" value={this.state.email} onChange={this.emailHandle.bind(this)}/>
+                        <input type="email" class="form-input" id="co-parentEmail"  placeholder="abc@example.com" value={this.state.email} onChange={this.emailHandle.bind(this)}/>
                     </Form.Group>
                 </fieldset>
                 <div>
