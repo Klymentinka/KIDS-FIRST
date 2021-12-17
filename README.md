@@ -12,8 +12,7 @@ KIDS FIRST
   <img src="https://img.shields.io/github/contributors/KIDS-FIRST?color=yellow&label=Contributors&logo=git&logoColor=yellow">
   <img src="https://img.shields.io/github/languages/count/KIDS-FIRST?color=green&label=Languages&logo=github&logoColor=orange">
   <img src="https://img.shields.io/github/languages/top/KIDS-FIRST?color=blue&label=ReactJS&logo=react&logoColor=pink">
-  <img src="https://img.shields.io/github/repo-size/KIDS-FIRST?color=purple&label=Repo%20Size&logo=github&logoColor=purple">
-                                                                              
+  <img src="https://img.shields.io/github/repo-size/KIDS-FIRST?color=purple&label=Repo%20Size&logo=github&logoColor=purple">                                                                              
 </p>
 
 ## Table of Contents
@@ -25,4 +24,3 @@ KIDS FIRST
 * [Future Goals](#future)
 * [Issues](#issues)
 * [Credits](#credits)
- 
