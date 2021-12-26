@@ -35,7 +35,7 @@ export default function Home() {
                     </div>
                 </div>
                 <div class="left-blurb">
-                    <h1>A co-parenting app solution</h1>
+                    <h1>A co-parenting app solution 001</h1>
                     <p>Maintain harmony in your kid’s lives with the help of one click</p>
                     <Button className="home-signup-btn-2" href="/Signup">Sign up now</Button>
                 </div>
