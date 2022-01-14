@@ -36,17 +36,21 @@ router.post(
       is_parent: req.body.is_parent,
     });
     console.log(`parent obj created: ${JSON.stringify(parent)}`);
-    const createdParent = await parent.save();
-    console.log(`parent obj saved: ${JSON.stringify(createdParent)}`);
-    res.send({
-      _id: createdParent._id,
-      firstName: createdParent.firstName,
-      lastName: createdParent.lastName,
-      dateOfBirth: createdParent.dateOfBirth,
-      email: createdParent.email,
-      is_parent: createdParent.is_parent,
-      token: generateToken(createdParent),
-    });
+    try {
+      const createdParent = await parent.save();
+      console.log(`parent obj saved: ${JSON.stringify(createdParent)}`);
+      res.send({
+        _id: createdParent._id,
+        firstName: createdParent.firstName,
+        lastName: createdParent.lastName,
+        dateOfBirth: createdParent.dateOfBirth,
+        email: createdParent.email,
+        is_parent: createdParent.is_parent,
+        token: generateToken(createdParent),
+      });
+    } catch (error) {
+      console.log(`got error: ${JSON.stringify(error)}`);
+    }
 
 
   })
