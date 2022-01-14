@@ -23,6 +23,7 @@ router.post(
     //check the db to see if you user already exists
     //if the user doesn't exist, create it and store it in the the db
     const oldParent = await Parent.findOne({ email });
+    console.log(`oldParent: ${JSON.stringify(oldParent)}`);
     if (oldParent) {
       res.status(401).send({ message: 'User already exists' });
     }
@@ -34,7 +35,9 @@ router.post(
       password: bcrypt.hashSync(req.body.password, 8),
       is_parent: req.body.is_parent,
     });
+    console.log(`parent obj created: ${JSON.stringify(parent)}`);
     const createdParent = await parent.save();
+    console.log(`parent obj saved: ${JSON.stringify(createdParent)}`);
     res.send({
       _id: createdParent._id,
       firstName: createdParent.firstName,
